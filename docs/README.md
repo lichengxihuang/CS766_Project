@@ -1,6 +1,6 @@
 ## Welcome to GitHub Pages
 
-url: https://lichengxihuang.github.io/CS766_Project/
+[https://lichengxihuang.github.io/CS766_Project/](https://lichengxihuang.github.io/CS766_Project/)
 
 You can use the [editor on GitHub](https://github.com/LichengxiHuang/CS766_Project/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
