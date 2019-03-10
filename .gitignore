@@ -5,6 +5,7 @@ __pycache__/
 
 .DS_Store
 
+
 # C extensions
 *.so
 
@@ -107,3 +108,5 @@ venv.bak/
 
 # latex
 
+
+.idea/
