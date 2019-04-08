@@ -1,3 +1,5 @@
+#Generate positive training dataset
+
 import os
 
 import cv2
@@ -10,7 +12,6 @@ def read_img():
 
     images = [cv2.imread(img) for img in filenames]
     return images
-
 
 def positive_process(images):
     i = 0
