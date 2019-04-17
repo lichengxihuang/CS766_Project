@@ -1,8 +1,7 @@
 import cv2
 import numpy as np
 import glob
-from matplotlib import pyplot as plt
-from os import listdir
+
 SIZE = 32
 
 def load_training_data():
@@ -49,7 +48,10 @@ def get_hog() :
     nlevels = 64
     signedGradient = True
 
-    hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nbins,derivAperture,winSigma,histogramNormType,L2HysThreshold,gammaCorrection,nlevels, signedGradient)
+    hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,
+                            cellSize,nbins,derivAperture,winSigma,
+                            histogramNormType,L2HysThreshold,gammaCorrection,
+                            nlevels, signedGradient)
 
     return hog
 
@@ -71,7 +73,6 @@ class SVM(StatModel):
         self.model.train(samples, cv2.ml.ROW_SAMPLE, responses)
 
     def predict(self, samples):
-
         return self.model.predict(samples)[1].ravel()
 
 
@@ -100,16 +101,21 @@ def traning():
         hog_descriptors.append(hog.compute(img))
     hog_descriptors = np.squeeze(hog_descriptors)
 
-
-    train_n = int(len(hog_descriptors))
-    data_train, data_test = np.split(data_deskewed, [train_n])
-    hog_descriptors_train, hog_descriptors_test = np.split(hog_descriptors, [train_n])
-    labels_train, labels_test = np.split(labels, [train_n])
-
     print('Training SVM model ...')
     model = SVM()
-    model.train(hog_descriptors_train, labels_train)
+    model.train(hog_descriptors, labels)
 
     print('Saving SVM model ...')
     model.save('data_svm.dat')
     return model
+
+
+def getLabel(model, data):
+    gray = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
+    img = [cv2.resize(gray,(SIZE,SIZE))]
+    #print(np.array(img).shape)
+    img_deskewed = list(map(deskew, img))
+    hog = get_hog()
+    hog_descriptors = np.array([hog.compute(img_deskewed[0])])
+    hog_descriptors = np.reshape(hog_descriptors, [-1, hog_descriptors.shape[1]])
+    return int(model.predict(hog_descriptors)[0])

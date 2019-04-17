@@ -21,9 +21,10 @@ def positive_process(images):
 
         img_name = 'resizeimg' + str(i) + '.jpg'
 
-        path = '\output_neg'
+        # path = '\output_neg'
         # cv2.imwrite(os.path.join(path, img_name), resized_img)
         cv2.imwrite(img_name, resized_img)
+
         cv2.waitKey(0)
 
         i += 1
@@ -42,7 +43,7 @@ def colorseg(stop):
     kernelOpen = np.ones((5, 5))
     kernelClose = np.ones((20, 20))
     hsv = cv2.cvtColor(stop, cv2.COLOR_RGB2HSV)
-    h,s,v = cv2.split(hsv)
+
     lower_red = np.array([20, 80, 50])
     upper_red = np.array([255, 255, 220])
 
