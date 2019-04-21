@@ -1,66 +1,73 @@
 import cv2
 import numpy as np
 import os
-import matplotlib.pyplot as plt
 
 
 
-def main():
-
-    in_dir = 'positive'
-    out_dir = 'training/pos'
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-    for filename in os.listdir(in_dir):
-        print(filename)
-
-        if os.path.isdir(in_dir+'/'+filename) or filename.startswith('.'):
-            continue
-
-        filename_list = filename.split('.')
-        assert len(filename_list) == 2
-
-
-        img = cv2.imread(in_dir + '/' + filename)
-
-        candidates = img_processing(img)
-
-        for i, candidate in enumerate(candidates):
-            candidate = cv2.resize(candidate, (100, 100))
-            cv2.imwrite(out_dir + '/' + 'rect_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], candidate)
-
-
-
-    # filename = 'image00398.jpg'
-    # filename_list = filename.split('.')
+def main(cropped=False):
+    # # in_dir = 'positive'
+    # # out_dir = 'training/pos'
+    # in_dir = 'original/new'
+    # out_dir = 'result1_1'
+    # if not os.path.exists(out_dir):
+    #     os.makedirs(out_dir)
+    # for filename in os.listdir(in_dir):
+    #     print(filename)
     #
-    # img = cv2.imread(filename)
+    #     full_filename = in_dir+'/'+filename
     #
-    # # img = contrastLimit(img)
-    # # cv2.imshow("Mask", img)
-    # # cv2.waitKey(0)
+    #     if os.path.isdir(full_filename) or filename.startswith('.'):
+    #         continue
     #
-    # candidates = img_processing(img)
+    #     filename_list = filename.split('.')
+    #     assert len(filename_list) == 2
     #
-    # for i, candidate in enumerate(candidates):
-    #     candidate = cv2.resize(candidate, (100,100))
-    #     cv2.imwrite('rect_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], candidate)
-
-
-def contrastLimit(image):
-    img_hist_equalized = cv2.cvtColor(image, cv2.COLOR_BGR2YCrCb)
-    channels = cv2.split(img_hist_equalized)
-    channels[0] = cv2.equalizeHist(channels[0])
-    img_hist_equalized = cv2.merge(channels)
-    img_hist_equalized = cv2.cvtColor(img_hist_equalized, cv2.COLOR_YCrCb2BGR)
-    return img_hist_equalized
-
+    #     img = cv2.imread(full_filename)
+    #
+    #     if cropped:
+    #         rois = get_rois(img)
+    #         for i, roi in enumerate(rois):
+    #             cv2.imwrite(out_dir + '/sub_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], roi)
+    #     else:
+    #         rois, points = get_rois(img, ret_points=True)
+    #         for i, point in enumerate(points):
+    #             cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
+    #         cv2.imwrite(out_dir + '/out_' + filename, img)
 
 
 
 
-def img_processing(img):
+    filename = 'WX20190420-132921@2x.png'
+    filename_list = filename.split('.')
+
+    img = cv2.imread(filename)
+
+    rois = get_rois(img)
+
+    for i, roi in enumerate(rois):
+        cv2.imwrite('sub_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], roi)
+
+
+# def contrastLimit(image):
+#     img_hist_equalized = cv2.cvtColor(image, cv2.COLOR_BGR2YCrCb)
+#     channels = cv2.split(img_hist_equalized)
+#     channels[0] = cv2.equalizeHist(channels[0])
+#     img_hist_equalized = cv2.merge(channels)
+#     img_hist_equalized = cv2.cvtColor(img_hist_equalized, cv2.COLOR_YCrCb2BGR)
+#     return img_hist_equalized
+
+
+
+
+
+def get_rois(img, ret_points=False):
+    """
+    :param img:
+    :param ret_points:
+    :return:
+    """
     scale = 2 / (img.shape[0] / 720 + img.shape[1] / 1280)
+    # scale = 2 / (img.shape[0] / 360 + img.shape[1] / 640)
     img = cv2.resize(img, None, fx=scale, fy=scale)
 
 
@@ -74,7 +81,7 @@ def img_processing(img):
     # cv2.imshow("mask", mask)
     # cv2.waitKey()
 
-    mask = find_connected(mask, thresh=2000)
+    mask = find_connected(mask, thresh=200)
 
     # cv2.imshow("mask", mask)
     # cv2.waitKey()
@@ -95,8 +102,8 @@ def img_processing(img):
 
         x_1 = max(int(c_x - c * w / 2), 0)
         y_1 = max(int(c_y - c * h / 2), 0)
-        x_2 = min(int(c_x + c * w / 2), img.shape[1])
-        y_2 = min(int(c_y + c * h / 2), img.shape[0])
+        x_2 = min(int(c_x + c * w / 2), img.shape[1] - 1)
+        y_2 = min(int(c_y + c * h / 2), img.shape[0] - 1)
 
         curr = [x_1, y_1, x_2, y_2]
 
@@ -119,13 +126,19 @@ def img_processing(img):
     #     cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
     # res = img
 
-    res = []
+
+    rois = []
     for point in points:
         x_1, y_1, x_2, y_2 = point
         curr = img[y_1:y_2 + 1, x_1:x_2 + 1]
-        res.append(cv2.resize(curr, (100, 100)))
+        roi = cv2.resize(curr, (100, 100))
+        rois.append(roi)
 
-    return res
+    if ret_points:
+        points = [[int(a/scale) for a in point] for point in points]
+        return rois, points
+    else:
+        return rois
 
 
 
@@ -147,9 +160,19 @@ def get_mask(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # select red color
-    mask1 = cv2.inRange(hsv, np.array([0, 70, 50]), np.array([10, 255, 255]))
+    # mask1 = cv2.inRange(hsv, np.array([0, 70, 50]), np.array([10, 255, 255]))
     # mask2 = cv2.inRange(hsv, np.array([170, 70, 50]), np.array([180, 255, 255]))
-    mask2 = cv2.inRange(hsv, np.array([150, 30, 50]), np.array([180, 255, 255]))
+
+    # mask1 = cv2.inRange(hsv, np.array([0, 70, 40]), np.array([10, 255, 255]))
+    # mask2 = cv2.inRange(hsv, np.array([150, 50, 40]), np.array([180, 255, 255]))
+
+    mask1 = cv2.inRange(hsv, np.array([0, 50, 40]), np.array([10, 255, 255]))
+    mask2 = cv2.inRange(hsv, np.array([150, 50, 40]), np.array([180, 255, 255]))
+
+    # # not good
+    # mask1 = cv2.inRange(hsv, np.array([0, 30, 40]), np.array([10, 255, 255]))
+    # mask2 = cv2.inRange(hsv, np.array([130, 30, 40]), np.array([180, 255, 255]))
+
 
     mask = mask1 | mask2
 
@@ -221,4 +244,4 @@ def apply_mask(mask, img):
 
 
 if __name__ == '__main__':
-    main()
+    main(cropped=True)
