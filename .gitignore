@@ -108,5 +108,7 @@ venv.bak/
 
 # latex
 
-
 .idea/
+
+
+*.MOV
