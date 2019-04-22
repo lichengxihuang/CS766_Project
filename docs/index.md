@@ -40,7 +40,7 @@ footer {
 <body style="background-color:Gainsboro;">
 
 <header>
-  <h1>CS 766 project</h1>
+<!--   <h1>CS 766 project</h1> -->
   <h1>Stop sign recognization</h1>
   <h4>Han Cao, Xi Chen, Lichengxi Huang</h4>
 </header>
