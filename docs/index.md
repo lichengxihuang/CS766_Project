@@ -1,40 +1,6 @@
-<header>
-
-# Stop sign recognization
-
-#### Han Cao, Xi Chen, Lichengxi Huang
-
-</header>
-
-## Background
-
-My first paragraph.
-
-## Motivation
-
-My second paragraph.
-
-## Current state-of-the-art
-
-My second paragraph.
-
-## Approach
-
-My second paragraph.
-
-## Results and Comparation
-
-My second paragraph.
-
-![StopSign](1.jpg)  
-
-## Discussion
-
-My second paragraph.
-
 
 <!-- <!DOCTYPE html>
-<html>
+<html> -->
 
 <head>
 <title>CSS Template</title>
@@ -113,5 +79,4 @@ footer {
 
 
 </body>
-</html>
- -->
+<!-- </html> -->
