@@ -1,0 +1,43 @@
+/*{
+  box-sizing: border-box;
+}*/
+
+body, html {
+    font-family: Helvetica;
+    height: 100%;
+    margin: 0;
+}
+
+/* Style the header */
+.header-image {
+    /* The image used */
+    background-image: url("stopsign.jpg");
+
+    /* Full height */
+    height: 50%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.header-text {
+    font-size:150%;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+/* Style the footer */
+footer {
+    background-color: black;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
