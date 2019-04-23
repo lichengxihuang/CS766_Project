@@ -52,78 +52,79 @@ def train():
 
 
 def test(clf):
-    # testfilename = 'dtg-dumbo-stop-sign-safest-ever-2017-04-07-bk01_z.jpg'
-    # testfilename = 'image00331.jpg'
+    testfilename = 'WX20190423-102222@2x.png'
+    in_dir = 'test'
+    out_dir = 'test'
 
     # in_dir = 'original/positive'
     # out_dir = 'results/original_positive'
-    # if not os.path.exists(out_dir):
-    #     os.makedirs(out_dir)
-    #
-    # for filename in os.listdir(in_dir):
-    #     full_filename = in_dir + '/' + filename
-    #     if os.path.isdir(full_filename) or filename.startswith('.'):
-    #         continue
-    #     img = cv2.imread(full_filename)
-    #     rois, points = get_rois(img, ret_points=True)
-    #     if not points:
-    #         continue
-    #
-    #     X = extract_hog(rois)
-    #     preds = clf.predict(X)
-    #
-    #     print(preds)
-    #
-    #     for i in range(len(preds)):
-    #         if preds[i]:
-    #             point = points[i]
-    #             cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
-    #     cv2.imwrite(out_dir + '/' + 'out_' + filename, img)
-
-
-
-
-    in_dir = 'original/videos'
-    out_dir = 'results/videos'
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    for filename in glob.glob(in_dir + '/' + '*.mp4'):
-        cap = cv2.VideoCapture(filename)
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        # out = cv2.VideoWriter(out_dir + '/result_' + os.path.basename(filename), 0x7634706d, 30, (int(cap.get(3)), int(cap.get(4))))
-        out = cv2.VideoWriter(out_dir + '/result_' + os.path.basename(filename), fourcc, 30, (int(cap.get(3)), int(cap.get(4))))
+    for filename in os.listdir(in_dir):
+        full_filename = in_dir + '/' + filename
+        if os.path.isdir(full_filename) or filename.startswith('.'):
+            continue
+        img = cv2.imread(full_filename)
+        rois, points = get_rois(img, ret_points=True)
+        if not points:
+            continue
 
-        while (cap.isOpened()):
+        X = extract_hog(rois)
+        preds = clf.predict(X)
 
-            ret, img = cap.read()
+        print(preds)
 
-            if ret == True:
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
-
-                rois, points = get_rois(img, ret_points=True)
-
-                if rois:                        # only predict when there are rois
-                    X = extract_hog(rois)
-                    preds = clf.predict(X)
-
-                    # print(preds)
-
-                    for i in range(len(preds)):
-                        if preds[i]:
-                            point = points[i]
-                            cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
-
-                out.write(img)
-
-            else:
-                break
+        for i in range(len(preds)):
+            if preds[i]:
+                point = points[i]
+                cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
+        cv2.imwrite(out_dir + '/' + 'out_' + filename, img)
 
 
-        cap.release()
-        out.release()
-        cv2.destroyAllWindows()
+
+
+    # in_dir = 'original/videos'
+    # out_dir = 'results/videos'
+    # if not os.path.exists(out_dir):
+    #     os.makedirs(out_dir)
+    #
+    # for filename in glob.glob(in_dir + '/' + '*.mp4'):
+    #     cap = cv2.VideoCapture(filename)
+    #     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    #     # out = cv2.VideoWriter(out_dir + '/result_' + os.path.basename(filename), 0x7634706d, 30, (int(cap.get(3)), int(cap.get(4))))
+    #     out = cv2.VideoWriter(out_dir + '/result_' + os.path.basename(filename), fourcc, 30, (int(cap.get(3)), int(cap.get(4))))
+    #
+    #     while (cap.isOpened()):
+    #
+    #         ret, img = cap.read()
+    #
+    #         if ret == True:
+    #             if cv2.waitKey(1) & 0xFF == ord('q'):
+    #                 break
+    #
+    #             rois, points = get_rois(img, ret_points=True)
+    #
+    #             if rois:                        # only predict when there are rois
+    #                 X = extract_hog(rois)
+    #                 preds = clf.predict(X)
+    #
+    #                 # print(preds)
+    #
+    #                 for i in range(len(preds)):
+    #                     if preds[i]:
+    #                         point = points[i]
+    #                         cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
+    #
+    #             out.write(img)
+    #
+    #         else:
+    #             break
+    #
+    #
+    #     cap.release()
+    #     out.release()
+    #     cv2.destroyAllWindows()
 
 
 
