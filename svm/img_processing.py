@@ -37,15 +37,21 @@ def main(cropped=False):
 
 
 
-    filename = 'WX20190420-132921@2x.png'
+    # filename = '1280px-Vienna_Convention_road_sign_B2a.png'
+    # filename = '5a0c299793a4492ca8045f18f5819152-600.jpeg'
+    filename = 'WX20190423-102222@2x.png'
     filename_list = filename.split('.')
 
     img = cv2.imread(filename)
 
-    rois = get_rois(img)
+    rois, points = get_rois(img, ret_points=True)
 
-    for i, roi in enumerate(rois):
-        cv2.imwrite('sub_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], roi)
+    for i, point in enumerate(points):
+        cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
+    cv2.imwrite('out_' + filename, img)
+
+
+
 
 
 # def contrastLimit(image):
@@ -70,13 +76,13 @@ def get_rois(img, ret_points=False):
     # scale = 2 / (img.shape[0] / 360 + img.shape[1] / 640)
     img = cv2.resize(img, None, fx=scale, fy=scale)
 
-
+    # get_edges(img)
     mask = get_mask(img)
     # cv2.imshow("mask", mask)
     # cv2.waitKey()
 
 
-    mask = fill_holes(mask)
+    # mask = fill_holes(mask)
 
     # cv2.imshow("mask", mask)
     # cv2.waitKey()
@@ -86,7 +92,7 @@ def get_rois(img, ret_points=False):
     # cv2.imshow("mask", mask)
     # cv2.waitKey()
 
-    contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # cnt = contours[2]
     # hull = cv2.convexHull(cnt)
@@ -139,6 +145,51 @@ def get_rois(img, ret_points=False):
         return rois, points
     else:
         return rois
+
+
+def get_edges(img):
+
+    ref_contour = np.array([[[295, 61]], [[61, 295]], [[61, 626]], [[295, 860]], [[626, 860]], [[860, 626]], [[860, 295]], [[626, 61]]])
+
+    mask = cv2.Canny(img, 100, 200)
+    mask = find_connected(mask, thresh=100)
+
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(img, contours, -1, (0, 255, 0), 2)
+
+    cv2.imshow("mask", img)
+    cv2.waitKey()
+
+
+    # mask = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # ret, mask = cv2.threshold(mask, 127, 255, 0)
+
+
+    # h, w = mask.shape
+    # cv2.floodFill(mask, np.zeros((h + 2, w + 2), np.uint8), (0, 0), 255)
+    # cv2.floodFill(mask, np.zeros((h + 2, w + 2), np.uint8), (0, h-1), 255)
+    # cv2.floodFill(mask, np.zeros((h + 2, w + 2), np.uint8), (w-1, 0), 255)
+    # cv2.floodFill(mask, np.zeros((h + 2, w + 2), np.uint8), (w-1, h-1), 255)
+    #
+    # cv2.imshow("mask", mask)
+    # cv2.waitKey()
+    # mask = cv2.bitwise_not(mask)
+    # mask = fill_holes(mask)
+
+    # cv2.imshow("mask", mask)
+    # cv2.waitKey()
+
+    # mask = find_connected(mask, thresh=500)
+    # cv2.imshow("mask", mask)
+    # cv2.waitKey()
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(img, contours, -1, (0, 255, 0), 2)
+
+    for cnt in contours:
+        print(cv2.matchShapes(cnt, ref_contour, method=cv2.CONTOURS_MATCH_I1, parameter=0))
+
+    cv2.imshow("mask", img)
+    cv2.waitKey()
 
 
 
@@ -215,7 +266,7 @@ def fill_holes(mask):
     # cv2.imshow("new_mask", new_mask)
     # cv2.imshow("mask_floodfill", mask_floodfill)
     # cv2.imshow("mask_floodfill_inv", mask_floodfill_inv)
-    # cv2.waitKey(0)
+    # cv2.waitKey()
     return new_mask
 
 
