@@ -39,29 +39,19 @@ def main(cropped=False):
 
     # filename = '1280px-Vienna_Convention_road_sign_B2a.png'
     # filename = '5a0c299793a4492ca8045f18f5819152-600.jpeg'
-    filename = 'WX20190423-102222@2x.png'
+    filename = 'dtg-dumbo-stop-sign-safest-ever-2017-04-07-bk01_z.jpg'
     filename_list = filename.split('.')
 
     img = cv2.imread(filename)
 
     rois, points = get_rois(img, ret_points=True)
 
+    # for i, roi in enumerate(rois):
+    #     cv2.imwrite('sub_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], roi)
+
     for i, point in enumerate(points):
         cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
     cv2.imwrite('out_' + filename, img)
-
-
-
-
-
-# def contrastLimit(image):
-#     img_hist_equalized = cv2.cvtColor(image, cv2.COLOR_BGR2YCrCb)
-#     channels = cv2.split(img_hist_equalized)
-#     channels[0] = cv2.equalizeHist(channels[0])
-#     img_hist_equalized = cv2.merge(channels)
-#     img_hist_equalized = cv2.cvtColor(img_hist_equalized, cv2.COLOR_YCrCb2BGR)
-#     return img_hist_equalized
-
 
 
 
@@ -82,7 +72,7 @@ def get_rois(img, ret_points=False):
     # cv2.waitKey()
 
 
-    # mask = fill_holes(mask)
+    mask = fill_holes(mask)
 
     # cv2.imshow("mask", mask)
     # cv2.waitKey()
@@ -112,7 +102,6 @@ def get_rois(img, ret_points=False):
         y_2 = min(int(c_y + c * h / 2), img.shape[0] - 1)
 
         curr = [x_1, y_1, x_2, y_2]
-
 
         i = 0
         while i < len(points):
