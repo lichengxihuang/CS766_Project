@@ -38,20 +38,20 @@ def main(cropped=False):
 
 
     # filename = '1280px-Vienna_Convention_road_sign_B2a.png'
-    # filename = '5a0c299793a4492ca8045f18f5819152-600.jpeg'
-    filename = 'dtg-dumbo-stop-sign-safest-ever-2017-04-07-bk01_z.jpg'
+    filename = 'img.jpg'
+
     filename_list = filename.split('.')
 
     img = cv2.imread(filename)
 
     rois, points = get_rois(img, ret_points=True)
 
-    # for i, roi in enumerate(rois):
-    #     cv2.imwrite('sub_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], roi)
+    for i, roi in enumerate(rois):
+        cv2.imwrite('sub_' + filename_list[0] + '_' + str(i) + '.' + filename_list[1], roi)
 
-    for i, point in enumerate(points):
-        cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
-    cv2.imwrite('out_' + filename, img)
+    # for i, point in enumerate(points):
+    #     cv2.rectangle(img, (point[0], point[1]), (point[2], point[3]), (0, 255, 0), 2)
+    # cv2.imwrite('out_' + filename, img)
 
 
 
