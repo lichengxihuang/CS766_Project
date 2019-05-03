@@ -6,7 +6,6 @@ body, html {
     font-family: Helvetica;
     height: 100%;
     margin: 0;
-
 }
 
 /* Style the header */
@@ -37,7 +36,9 @@ body, html {
 
 .main {
     background-color: white;
-    margin: 10px 50px 10px 50px;
+    margin: 100px 200px;
+    vertical-align: middle;
+    font-size: 18px;
 }
 
 
