@@ -1,4 +1,4 @@
-/*{
+/** {
   box-sizing: border-box;
 }*/
 
@@ -41,7 +41,11 @@ body, html {
 }
 
 
-/* Style the footer */
+div iframe {
+    border: none;
+    padding: 0 10px;
+}
+
 footer {
     background-color: black;
     padding: 20px;
