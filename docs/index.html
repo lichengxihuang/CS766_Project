@@ -19,38 +19,88 @@
 
 <div class="main">
     <h2>Background</h2>
-    <p> My first paragraph. </p>
+    <p> Traffic signs play a significant role in the modern traffic system, and it becomes even more important in recent years due to the emergence of autonomous vehicles. The problem we are aiming to solve is to use the computer vision technologies to do the stop signs recognition under different driving scenarios and extreme cases.
+    </p>
     <br>
 
     <h2>Motivation</h2>
-    <p> My second paragraph.</p>
+    <p>In the development of autonomous vehicles, recognizing the stop signs plays a very important role. Although in the future, when connected autonomous vehicles are developed, this may be solved by using roadside units sending instructions to the vehicles, nowadays, we still need to rely on the vehicles themselves to recognize road lanes and signs. Furthermore, vehicles that can recognize traffic signs will improve the driving experiences and safety for the drivers. Most drivers may have experienced situations when they were driving too fast on the highways and did not see clearly what the road guidance sign tells, hence driving to the wrong direction. In other cases, drivers may not see speed limit signs when the environment is dark, hence getting a ticket on over speeding.</p>
+    <p>These scenarios can all be avoided as long as we can develop an application that can automatically recognize the traffic signs. The vehicles that are equipped with this application can extract the key information, and either speak it out or display it on the head-up displays (HUD).
+    </p>
     <br>
     
     <h2>Current state-of-the-art</h2>
     <p> My second paragraph.</p>
     <br>
 
-    <h2>Approach</h2>
-    <p> SVM + HOG</p>
-    <p> We downladed dataset with stop signs as positive dataset and without stop signs as negative dataset from the internet. Applied algorithm to select  and crop ROI</p>
-    <p> for positive dataset. Randomly select and crop subimages from negative data set. Resize the subimages to be the same size and use HOG to extract features for each</p>
-    <p> images.</p>
-    <img src="algo_process.jpg" alt="algorithm" width="333" height="333">
+    <h2>Models</h2>
+    <h3> Model 2 - SVM + HOG</h3>
+    <h4> Algorithm</h4>
+    <p> We downladed dataset with stop signs as positive dataset and without stop signs as negative dataset from the internet. Applied algorithm to select  and crop ROI for positive dataset. Randomly select and crop subimages from negative data set. Resize the subimages to be the same size and use HOG to extract features for each images.</p>
+
+    <img src="algo_process.jpg" alt="algorithm" width="900" height="350">
     <br>
+
+    <h4> Training Dataset</h4>
+    <h5> Positive Training Dataset</h5>
+    <p> Our positive training dataset including the extreme conditions such as raining, snowing, blur, dark. Part of the traing dataset is shown as following.</p>
+    <img src="positive.jpg" alt="positive" width="550" height="350">
+    <br>
+
+    <h5> Negative Training Dataset</h5>
+    <p> Our negative training dataset including the subimages without stop signs. Part of the traing dataset is shown as following.</p>
+     <img src="negative.jpg" alt="negative" width="400" height="300">
+    <br>
+
+    <h4>Example</h4>
+    <p>Here we want to illustrate the process of our algorithm using an image with complex background. First, we convert the orignial image to a HSV format. HSV format is more robust to color segmentation. We define a range to select out all the red objects.</p>
+    <img src="ex1.jpg" alt="ex1" width="800" height="200">
+    <br>
+    <p>Secondly, we use dialation and erosiion to romove noise in the image.</p>
+    <img src="ex2.jpg" alt="ex2" width="800" height="200">
+    <br>
+    <p>Thirdly, we applied algorithm to fill holes within a contour. For example, after filling the holes, the "stop" holes in the stop sign will be removes. In this way, we can remove unneccessary contours and decrease the number of ROI candidates to reduce the running time and increase the detection accuracy.</p>
+    <img src="ex3.jpg" alt="ex3" width="800" height="200">
+    <br>
+    <p>Fourthly, we discard the contours with sizes smaller than a threshold to remove small unneccessary objects.</p>
+    <img src="ex4.jpg" alt="ex4" width="800" height="200">
+    <br>
+    <p>We pick the bottom left and top left pixels to draw bounding boxes. Each subimage in the bounding box is a candidate ROI.</p>
+    <img src="ex5.jpg" alt="ex5" width="800" height="200">
+    <br>
+    <p>Finally, remove the unneccessary small bounding box laying within a big bounding box to get the ROI candidates.</p>
+    <img src="ex6.jpg" alt="ex6" width="800" height="200">
+    <br>
+
+    <h5>Selection using SVM</h5>
+    <p>We got several ROI candidates after the ROI selection. We use HOG to extract features for each ROI candidates and put the features for each ROI candidate to the trained RBF kernel SVM model and get the stop sign.</p>
+    <img src="test.jpg" alt="test" width="800" height="350">
+    <br>
+
 
     <h2>Results and Comparation</h2>
-    <p> My second paragraph.</p>
-    <img src="1.jpg" alt="StopSign" width="333" height="333">
-    <br>
+    <p> We tested our algorithm on extreme weather conditions as well as with the images of complex backgrouds (such as with lots of red objects around the stop signs as the following. Our algorithm is very robust to these conditions and can detect the stop signs in these images correctly.</p>
+    
+    <div id="banner" style="overflow: hidden; display: flex; justify-content:space-around;">
+        <div class="inline-block" style="max-width: 20%; max-height: 20%;">
+            <img src="result1.jpg" alt="result1" width="450" height="220">
+        </div>
 
-    <h2>Discussion</h2>
-    <p> My second paragraph.</p>
-    <br>
+        <div class="inline-block" style="max-width: 100%; max-height: 100%;">
+            <img src="result2.jpg" alt="result2" width="450" height="220">
+        </div>
+    </div>
 
+    <br>
+    <p>We drove in Madison when the weather is raining and sunny. Our alogrithm can successfully detect and track stop signs in the following video.
     <div align="center">
         <iframe src="https://www.youtube.com/embed/L8ZecvQdd00?autoplay=0"></iframe>
         <iframe src="https://www.youtube.com/embed/EmXHeHNq6tU?autoplay=0"></iframe>
     </div>
+
+    <h2>Discussion</h2>
+    <p> Our algorithm can recognize the stop sign in differnet scienarios quickly and robustly. </p>
+    <br>
 
 </div>
 
