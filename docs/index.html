@@ -33,26 +33,38 @@
     <p> My second paragraph.</p>
     <br>
 
-    <h2>Models</h2>
-    <h3> Model 2 - SVM + HOG</h3>
-    <h4> Algorithm</h4>
+    <h2>Model 1 - Deep Learning Approch</h2>
+    <h3>OverView</h3>
+    <p>In this part, we tried to use YOLOv3 to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
+
+    <h3>First try: YOLOv3 + COCO</h3>
+    
+
+
+
+
+
+
+
+    <h2> Model 2 - SVM + HOG</h2>
+    <h3> Algorithm</h3>
     <p> We downladed dataset with stop signs as positive dataset and without stop signs as negative dataset from the internet. Applied algorithm to select  and crop ROI for positive dataset. Randomly select and crop subimages from negative data set. Resize the subimages to be the same size and use HOG to extract features for each images.</p>
 
     <img src="algo_process.jpg" alt="algorithm" width="900" height="350">
     <br>
 
-    <h4> Training Dataset</h4>
-    <h5> Positive Training Dataset</h5>
+    <h3> Training Dataset</h3>
+    <h4> Positive Training Dataset</h4>
     <p> Our positive training dataset including the extreme conditions such as raining, snowing, blur, dark. Part of the traing dataset is shown as following.</p>
     <img src="positive.jpg" alt="positive" width="550" height="350">
     <br>
 
-    <h5> Negative Training Dataset</h5>
+    <h4> Negative Training Dataset</h4>
     <p> Our negative training dataset including the subimages without stop signs. Part of the traing dataset is shown as following.</p>
      <img src="negative.jpg" alt="negative" width="400" height="300">
     <br>
 
-    <h4>Example</h4>
+    <h3>Example</h3>
     <p>Here we want to illustrate the process of our algorithm using an image with complex background. First, we convert the orignial image to a HSV format. HSV format is more robust to color segmentation. We define a range to select out all the red objects.</p>
     <img src="ex1.jpg" alt="ex1" width="800" height="200">
     <br>
@@ -72,7 +84,7 @@
     <img src="ex6.jpg" alt="ex6" width="800" height="200">
     <br>
 
-    <h5>Selection using SVM</h5>
+    <h4>Selection using SVM</h4>
     <p>We got several ROI candidates after the ROI selection. We use HOG to extract features for each ROI candidates and put the features for each ROI candidate to the trained RBF kernel SVM model and get the stop sign.</p>
     <img src="test.jpg" alt="test" width="800" height="350">
     <br>
@@ -85,14 +97,6 @@
         <img src="result1.jpg" alt="result1" width="600" height="300">
         <img src="result2.jpg" alt="result2" width="600" height="300">
     </div>
-    <!-- <div style="overflow: hidden; display: flex; justify-content:space-around;">
-        <div style="max-width: 20%; max-height: 20%;">
-            
-        </div>
-        <div style="max-width: 100%; max-height: 100%;">
-            
-        </div>
-    </div> -->
 
     <br>
     <p>We drove in Madison when the weather is raining and sunny. Our alogrithm can successfully detect and track stop signs in the following video.
