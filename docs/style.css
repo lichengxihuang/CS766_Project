@@ -44,9 +44,9 @@ body, html {
 
 div iframe {
     border: none;
-    padding: 0 10px;
-    width: 540px;
-    height: 360px;
+    /*padding: 0 10px;*/
+    width: 720px;
+    height: 480px;
 }
 
 footer {
