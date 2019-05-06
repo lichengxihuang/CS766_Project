@@ -73,7 +73,7 @@
 
     <p>A peek of COCO data set:</p>
 
-    <img class="center" src="COCO_PEEK.png" alt="COCO_PEEK" width="700">
+    <img class="center" src="approach1_COCO_peek.png" alt="approach1_COCO_peek" width="700">
 
     <h4>Input data preparation</h4>
     <p>We used COCO API to preprocess our data using the following command:</p>
@@ -101,12 +101,12 @@
     </ul>
 
     <h4>Results</h4>
-    <p>Our result for normal cases was good, and the IOU was 0.973 as following:</p>
-    <img class="center" src="COCO_RESULT.png" alt="COCO_RESULT" id="#COCO_RESULT" width="400">
+    <p>Our result for normal cases was good, and the IOU was 0.973 as follows:</p>
+    <img class="center" src="approach1_COCO_result.png" alt="approach1_COCO_result" width="500">
 
 
     <h4>Extreme cases</h4>
-    <p>Although YOLOv3 performed well on normal images, it failed for all extreme cases. We summarize the extreme cases as following:</p>
+    <p>Although YOLOv3 performed well on normal images, it failed for all extreme cases. We summarize the extreme cases as follows:</p>
 
     <ol>
         <li>Blur</li>
@@ -135,21 +135,20 @@
 
     <h3>Second try: YOLO-Tiny + LISA</h3>
     
+    <h4>LISA</h4>
     <p>To solve the extreme cases problem, we chose to use some other data set. We chose LISA Traffic Sign Dataset, which contains 47 US sign types. Here are some image examples of the dataset.</p>
+    <img class="center" src="approach1_LISA_peek.png" alt="approach1_LISA_peek" width="600">
 
-    <img class="center" src="LISA_PEEK.png" alt="LISA_PEEK" id="#LISA_PEEK" width="600">
+    <h4>YOLO-Tiny</h4>
+    <p>Instead of 102 layers of YOLOv3, YOLO-Tiny has only nine layers, which is much faster for training.</p>
 
     <h4>Image pre-processing</h4>
-    The pipeline of image pre-processing is first check whether it is blurred, if yes, 
+    <p>Our algorithm for image pre-processing is shown as follows:</p>
+    <img class="center" src="approach1_image_preprocessing.png" alt="approach1_image_preprocessing" width="800">
 
-    Our algorithm is as following:
-    <img class="center" src="CV.png" alt="CV" id="#CV" width="800">
-    
-    <h4>YOLO-Tiny + LISA-TS</h4>
-    <p>Based on our solutions analyzed above, we choose YOLO-Tiny + LISA-TS as the final model.</p>
-    <p>Data-Preparation : We applied a set of tools to help us prepare the data.</p>
-    <p>YOLO-Tiny : Instead of 102 layers of YOLOv3, YOLO-Tiny only has 9 layers, which means faster to trian.</p>
-    <p>Model Configurations : </p>
+    <h4>Training</h4>
+
+    <p>The configuration of the YOLO-Tiny model is shown as follows:</p>
     <ul>
         <li>Batches = 64</li>
         <li>Subdivision = 8</li>
@@ -158,21 +157,21 @@
         <li>Momentum = 0.9</li>
         <li>learning_rate=0.001</li>
         <li>burn_in=1000</li>
-        
     </ul>
 
-    <p>Training : </p>
-    <ul>
+    <!-- <ul>
         <li>OS: Ubuntu 18.04 LTS</li>
         <li>CUDA: 10.01</li>
         <li>GPU: GTX 2080 Ti</li>
         <li>OPENCV: 3.4.4</li>  
-    </ul>
+    </ul> -->
 
-    <p>Results:</p>
-    <img class="center" src="SHOW_1.png" alt="SHOW_1" id="#SHOW_1" width="600">
+
+
+    <h4>Results</h4>
+    <img class="center" src="approach1_show_1.png" alt="approach1_show_1" width="600">
     <br>
-    <img class="center" src="SHOW_2.png" alt="SHOW_2" id="#SHOW_2" width="600">
+    <img class="center" src="approach1_show_2.png" alt="approach1_show_2" width="600">
 
 
 
