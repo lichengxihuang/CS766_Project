@@ -14,6 +14,7 @@
     <div class="header-text">
         <h1>Stop Sign Detection</h1>
         <h4>Han Cao, Xi Chen, Lichengxi Huang</h4>
+        <!-- <h4>University of Wisconsin-Madison</h4> -->
     </div>
 </div>
 
@@ -91,7 +92,7 @@
         <li>Active community: Easy to find solution</li>
     </ul>
 
-    <h4>Training YOLOv3</h4>
+    <h4>Training</h4>
     <p>We used the following packages and facilities to help us train the model:</p>
     <ul>
         <li>OS: Ubuntu 18.04 LTS</li>
@@ -100,7 +101,7 @@
         <li>OPENCV: 3.4.4</li>
     </ul>
 
-    <h4>Results</h4>
+    <h4>Testing results</h4>
     <p>Our result for normal cases was good, and the IOU was 0.973 as follows:</p>
     <img class="center" src="approach1_COCO_result.png" alt="approach1_COCO_result" width="500">
 
@@ -166,9 +167,8 @@
         <li>OPENCV: 3.4.4</li>  
     </ul> -->
 
-
-
-    <h4>Results</h4>
+    <h4>Testing results</h4>
+    <p>Here are part of the testing results, where the model successfully detects stop signs under dark environment.</p>
     <img class="center" src="approach1_show_1.png" alt="approach1_show_1" width="600">
     <br>
     <img class="center" src="approach1_show_2.png" alt="approach1_show_2" width="600">
@@ -290,13 +290,17 @@
         <iframe src="https://www.youtube.com/embed/EmXHeHNq6tU?autoplay=0"></iframe>
     </div>
 
+
     <br>
 
-    <h3>Discussion</h3>
-    <h4>Deep learning</h4>
-    <p>YOLO-Tiny + LISA can detect stop signs in real time efficiently. It also very robust to some conrner cases.</p>
 
-    <h4>SVM + HOG</h4>
+    <h2>Discussion</h2>
+    <h3>Approach 1 - deep learning</h3>
+    <p>The YOLO-Tiny + LISA can detect stop signs in real time efficiently. After we applied image preprocessing for images that are blurred, dark or over-exposed, the model also did well on these extreme cases.</p>
+
+
+
+    <h3>Approach 2 - SVM + HOG</h3>
 
     <h4>Running time</h4>
 
@@ -323,6 +327,10 @@
     <br>
 
 
+    <h2>Code</h2>
+    <p>The code is stored at <a href="https://github.com/lichengxihuang/CS766_Project">https://github.com/lichengxihuang/CS766_Project</a>.</p>
+
+    <br>
 
     <h2>References</h2>
     <ol>
