@@ -51,7 +51,7 @@
     <p>Following are some widely-used approaches to the problem:</p>
     <ul>
         <li>Histogram of oriented gradients (HOG) + supervised learning (SVM, random forest)</li>
-        <li>Deep learning approaches (RCNN, Mask-RCNN, Fast-RCNN, Yolo, ...)</li>
+        <li>Deep learning approaches (RCNN, Mask-RCNN, Fast-RCNN, YOLO, ...)</li>
     </ul>
     
     <br>
@@ -63,38 +63,36 @@
 
     <h2>Approach 1 - deep learning</h2>
     <h3>Overview</h3>
-    <p>In this part, we tried to use YOLOv3 to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
+    <p>In this part, we tried to use YOLOv3 (You Only Look Once v3) to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
 
     <h3>First try: YOLOv3 + COCO</h3>
     <h4>COCO data set</h4>
-    <p>COCO is a large-scale object detection, segmentation, and captioning dataset. We choose COCO as our data set due to we do not need to reformat the annoation, and COCO has a large set of training data of STOP sign.</p>
+    <p>COCO is a large-scale object detection, segmentation, and captioning dataset. We chose COCO as our data set because we do not need to reformat the annoation, and COCO has a large set of training data of stop sign.</p>
     
-    <p>COCO has two advantages:</p>
-    <ul>
-        <li>The resolution of the training data are high.</li>
-        <li>All pictures were taken underder normal conditions.</li>
-    </ul>
-    
-    <p>Following is a peek of COCO data set.</p>
+    <p>The resolution of the training data is high and all pictures were taken under normal conditions.</p>
 
-    <img class="center" src="COCO_PEEK.png" alt="COCO_PEEK" id="#COCO_PEEK" width="700" height="410">
+    <p>A peek of COCO data set:</p>
+
+    <img class="center" src="COCO_PEEK.png" alt="COCO_PEEK" width="700">
 
     <h4>Input data preparation</h4>
-    <p>We used provided COCOAPI to prepross our data using the following command:</p>
-    <xmp style = "text-align: center;"># get all images containing given categories, select one at random</xmp>
-    <xmp>            catIds = coco.getCatIds(catNms=['stop_sign']);</xmp>
-    <xmp>            imgIds = coco.getImgIds(catIds=catIds );</xmp>
+    <p>We used COCO API to preprocess our data using the following command:</p>
+    <code style="font-size:12pt"># get all images containing given categories, select one at random<br>
+        catIds = coco.getCatIds(catNms=['stop_sign']);<br>
+        imgIds = coco.getImgIds(catIds=catIds );
+    </code>
+
     
     <h4>YOLOv3</h4>
-    <p>YOLO3 has the following advantages:</p>
+    <p>YOLOv3 is a very famous object detector, which has the following advantages:</p>
     <ul>
         <li>Fast: Can perform detection in 30FPS live video</li>
         <li>Arcurate: Have a fairly good arcuracy in pre-trained model</li>
-        <li>Active community: easy to find solution</li>
+        <li>Active community: Easy to find solution</li>
     </ul>
 
     <h4>Training YOLOv3</h4>
-    <p>We use the following packages and facilities to help us train the model:</p>
+    <p>We used the following packages and facilities to help us train the model:</p>
     <ul>
         <li>OS: Ubuntu 18.04 LTS</li>
         <li>CUDA: 10.01</li>
@@ -103,12 +101,12 @@
     </ul>
 
     <h4>Results</h4>
-    <p>Normal cases:</p>
-    <p>Our result for normal cases is great and the IOU is 0.973 as following:</p>
+    <h5>Normal cases:</h5>
+    <p>Our result for normal cases was good, and the IOU was 0.973 as following:</p>
     <img class="center" src="COCO_RESULT.png" alt="COCO_RESULT" id="#COCO_RESULT" width="400">
 
-    <p>Extreme cases:</p>
-    <p>There are some extreme cases when we driving the cars as following pictures. YOLOv3 failed for all of the cases.</p>
+    <h5>Extreme cases:</h5>
+    <p>There are some extreme cases when we drive the cars as following pictures. YOLOv3 failed for all of the cases.</p>
     <img class="center" src="EXTREME_CAES.png" alt="EXTREME_CAES" id="#EXTREME_CAES" width="600">
 
     <h4>Extreme cases summary:</h4>
