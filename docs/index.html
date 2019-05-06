@@ -170,8 +170,8 @@
 
     <br>
 
-    <h2>Results and Comparation</h2>
-    <p> We tested our model on images taken under extreme weather conditions as well as those with complex backgrounds (images with a lot of confusing red objects that are very similar to stop signs). Our algorithm is very robust to these conditions and can detect the stop signs in these images accurately.</p>
+    <h3>Results</h3>
+    <p> We tested our model on images taken under extreme weather conditions as well as those with complex backgrounds (images with a lot of confusing red objects that are very similar to stop signs). Our model was very robust to these conditions and can detect the stop signs in these images accurately.</p>
     
     
     <img class="center" src="results1.png" alt="results1" width="600">
@@ -180,15 +180,38 @@
 
     <br>
 
-    <p>Furthermore, we drove in the city of Madison, WI in both rainy and sunny days and took the videos. Our model again showed robust ability of detecting and tracking the stop signs under different scenarios. Videos are shown below.
+    <p>Furthermore, we drove in the city of Madison, WI in both rainy and sunny days and took the videos. Our model again showed robust ability of detecting and tracking the stop signs under different scenarios. Videos are shown below.</p>
+
     <div align="center">
         <iframe src="https://www.youtube.com/embed/L8ZecvQdd00?autoplay=0"></iframe>
         <iframe src="https://www.youtube.com/embed/EmXHeHNq6tU?autoplay=0"></iframe>
     </div>
 
-    <h2>Discussion</h2>
-    <p> SVM + HOG algorithm can recognize the stop sign in differnet scienarios quickly and robustly. However, in some situations when the red stop sogn is connected with a red object whithout separating the algorithm failed on ROIs selection. Even the algorithm is very fast, it still can't make a real time detection.
-    In general, SVM + HOG is fast and can detect stop signs in multiple complex scenarios robustly.
+    <br>
+
+    <h3>Discussion</h3>
+
+    <h4>Running time</h4>
+
+    <p>This SVM + HOG approach is relatively fast compared to other models. For example, the one minute video takes about two minutes to process, and we can see the very small stop signs can even be detected.</p>
+
+    <p>Acutally, the running time largely depends on how much accuracy we want to achieve. If we make the threshold larger, more small objects will be filtered out and we can only detect the stop signs that are large enough (in pixels). However, if we want to detect the stop signs faraway, we have to make the threshold smaller and that will take more time to process.</p>
+
+    <h4>Pros</h4>
+    <p>Here are some of the advantages of our HOG + SVM model:</p>
+    <ol>
+        <li>The running time is good compared to other models, especially to deep learning models.</li>
+        <li>It can achieve high accuracy if the threshold is small enough.</li>
+        <li>It can detect robustly under most extreme weather conditions, especially in cloudy, rainy and snowy weather.</li>
+        <li>It is easy to implement and it does not need expensive hardware.</li>
+    </ol>
+    
+    <h4>Cons</h4>
+    <p>Although the results (images and videos) show that our model is very robust to some of the extreme conditions, there are still certain cases where this model cannot work very well. These include:</p>
+        <ul>
+            <li>The weather is extremely dark, then our color mask will just filter out the stop signs.</li>
+            <li>When there are red objects covering or connecting to part of the stop sign, the image processing process will treat them as a single object, and hence the supervised learning classifier will vote for "no".</li>
+        </ul>
     </p>
     <br>
 
