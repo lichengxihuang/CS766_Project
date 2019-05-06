@@ -63,7 +63,7 @@
 
     <h2>Approach 1 - deep learning</h2>
     <h3>Overview</h3>
-    <p>In this part, we tried to use YOLOv3 (You Only Look Once v3) to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
+    <p>In this part, we tried to use YOLOv3 (You Only Look Once v3) to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA), we examed our results by using challenging condition pictures.</p>
 
     <h3>First try: YOLOv3 + COCO</h3>
     <h4>COCO data set</h4>
@@ -101,61 +101,47 @@
     </ul>
 
     <h4>Results</h4>
-    <h5>Normal cases:</h5>
     <p>Our result for normal cases was good, and the IOU was 0.973 as following:</p>
     <img class="center" src="COCO_RESULT.png" alt="COCO_RESULT" id="#COCO_RESULT" width="400">
 
 
-    <h5>Extreme cases:</h5>
-    <p>There are some extreme cases when we drive the cars as following pictures. YOLOv3 failed for all of the cases.</p>
-    <img class="center" src="EXTREME_CAES.png" alt="EXTREME_CAES" id="#EXTREME_CAES" width="600">
+    <h4>Extreme cases</h4>
+    <p>Although YOLOv3 performed well on normal images, it failed for all extreme cases. We summarize the extreme cases as following:</p>
 
-    <p>Extreme cases:</p>
-    <p>There are some extreme cases when we driving the cars as following pictures. YOLOv3 failed for all of the cases.</p>
-    <img class="center" src="failed_cases.png" alt="failed_cases" id="#failed_cases" width="600">
-
-
-    <h4>Extreme cases summary:</h4>
-    <p>We summarize the extreme cases as following:</p>
-    <p>Problem 1. Len Blur</p>
-    <img class="center" src="1.png" alt="1" id="#1" width="800">
-    <p>Problem 2. Darkening</p>
-    <img class="center" src="2.png" alt="2" id="#2" width="800">
-    <p>Problem 3. Dirty lens</p>
-    <img class="center" src="3.png" alt="3" id="#3" width="800">
-    <p>Problem 4. Over-exposure</p>
-    <img class="center" src="4.png" alt="4" id="#4" width="800">
-    <p>Problem 5. Rain</p>
-    <img class="center" src="5.png" alt="5" id="#5" width="800">
-    <p>Problem 6. Snow</p>
-    <img class="center" src="6.png" alt="6" id="#6" width="800">
-    <p>Problem 7. Haze</p>
-    <img class="center" src="7.png" alt="7" id="#7" width="800">
+    <ol>
+        <li>Blur</li>
+        <img class="center" src="extreme_cases1.png" width="800">
+        <br>
+        <li>Darkness</li>
+        <img class="center" src="extreme_cases2.png" width="800">
+        <br>
+        <li>Dirty lens</li>
+        <img class="center" src="extreme_cases3.png" width="800">
+        <br>
+        <li>Over-exposure</li>
+        <img class="center" src="extreme_cases4.png" width="800">
+        <br>
+        <li>Rain</li>
+        <img class="center" src="extreme_cases5.png" width="800">
+        <br>
+        <li>Snow</li>
+        <img class="center" src="extreme_cases6.png" width="800">
+        <br>
+        <li>Haze</li>
+        <img class="center" src="extreme_cases7.png" width="800">
+    </ol>
+    
     <br>
 
-    <h4>Solution</h4>
-    <p>We want to solve the extreme cases problem by reselect data set and image preprossing.</p>
-    <p>Better datasets:</p>
-    <ol>
-        <li>LISA-TS (http://cvrr.ucsd.edu/LISA/lisa-traffic-sign-dataset.html)</li>
-        <ul>
-            <li>Pros: North America Standard and cConsover all traffic sign types.</li>
-            <li>Cons: The format of annotations does not match our need, lack of essential information and does not have extreme cases.</li>
-        </ul>
+    <h3>Second try: YOLO-Tiny + LISA</h3>
+    
+    <p>To solve the extreme cases problem, we chose to use some other data set. We chose LISA Traffic Sign Dataset, which contains 47 US sign types. Here are some image examples of the dataset.</p>
 
-        <li>CURE-TSR (https://ghassanalregib.com/cure-tsr/)</li>
-        <ul>
-            <li>Pros: Includes corner cases.</li>
-            <li>Cons: Format of annotations.</li>
-        </ul>
-        <li>Belgium-TS (https://btsd.ethz.ch/shareddata/)</li>
-
-        <li>GTSB (http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset)</li>
-    </ol>
-    <p> We finally chose the LISA-TS as our trianing data set. Following is the peek of LISA-TS:</p>
     <img class="center" src="LISA_PEEK.png" alt="LISA_PEEK" id="#LISA_PEEK" width="600">
 
-    <p>CV pre-processing:</p>
+    <h4>Image pre-processing</h4>
+    The pipeline of image pre-processing is first check whether it is blurred, if yes, 
+
     Our algorithm is as following:
     <img class="center" src="CV.png" alt="CV" id="#CV" width="800">
     
