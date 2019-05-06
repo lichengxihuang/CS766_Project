@@ -66,10 +66,124 @@
     <p>In this part, we tried to use YOLOv3 to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
 
     <h3>First try: YOLOv3 + COCO</h3>
+    <h4>COCO data set</h4>
+    <p>COCO is a large-scale object detection, segmentation, and captioning dataset. We choose COCO as our data set due to we do not need to reformat the annoation, and COCO has a large set of training data of STOP sign.</p>
     
+    <p>COCO has two advantages:</p>
+    <ul>
+        <li>The resolution of the training data are high.</li>
+        <li>All pictures were taken underder normal conditions.</li>
+    </ul>
+    
+    <p>Following is a peek of COCO data set.</p>
 
+    <img class="center" src="COCO_PEEK.png" alt="COCO_PEEK" id="#COCO_PEEK" width="700" height="410">
 
+    <h4>Input data preparation</h4>
+    <p>We used provided COCOAPI to prepross our data using the following command:</p>
+    <xmp style = "text-align: center;"># get all images containing given categories, select one at random</xmp>
+    <xmp>            catIds = coco.getCatIds(catNms=['stop_sign']);</xmp>
+    <xmp>            imgIds = coco.getImgIds(catIds=catIds );</xmp>
+    
+    <h4>YOLOv3</h4>
+    <p>YOLO3 has the following advantages:</p>
+    <ul>
+        <li>Fast: Can perform detection in 30FPS live video</li>
+        <li>Arcurate: Have a fairly good arcuracy in pre-trained model</li>
+        <li>Active community: easy to find solution</li>
+    </ul>
+
+    <h4>Training YOLOv3</h4>
+    <p>We use the following packages and facilities to help us train the model:</p>
+    <ul>
+        <li>OS: Ubuntu 18.04 LTS</li>
+        <li>CUDA: 10.01</li>
+        <li>GPU: GTX 2080 Ti</li>
+        <li>OPENCV: 3.4.4</li>
+    </ul>
+
+    <h4>Results</h4>
+    <p>Normal cases:</p>
+    <p>Our result for normal cases is great and the IOU is 0.973 as following:</p>
+    <img class="center" src="COCO_RESULT.png" alt="COCO_RESULT" id="#COCO_RESULT" width="400" height="210">
+
+    <p>Extreme cases:</p>
+    <p>There are some extreme cases when we driving the cars as following pictures. YOLOv3 failed for all of the cases.</p>
+    <img class="center" src="EXTREME_CAES.png" alt="EXTREME_CAES" id="#EXTREME_CAES" width="600" height="400">
+
+    <h4>Extreme cases summary:</h4>
+    <p>We summarize the extreme cases as following:</p>
+    <p>Problem 1. Len Blur</p>
+    <img class="center" src="1.png" alt="1" id="#1" width="800" height="90">
+    <p>Problem 2. Darkening</p>
+    <img class="center" src="2.png" alt="2" id="#2" width="800" height="90">
+    <p>Problem 3. Dirty lens</p>
+    <img class="center" src="3.png" alt="3" id="#3" width="800" height="90">
+    <p>Problem 4. Over-exposure</p>
+    <img class="center" src="4.png" alt="4" id="#4" width="800" height="90">
+    <p>Problem 5. Rain</p>
+    <img class="center" src="5.png" alt="5" id="#5" width="800" height="90">
+    <p>Problem 6. Snow</p>
+    <img class="center" src="6.png" alt="6" id="#6" width="800" height="90">
+    <p>Problem 7. Haze</p>
+    <img class="center" src="7.png" alt="7" id="#7" width="800" height="90">
     <br>
+
+    <h4>Solution</h4>
+    <p>We want to solve the extreme cases problem by reselect data set and image preprossing.</p>
+    <p>Better datasets:</p>
+    <ol>
+        <li>LISA-TS (http://cvrr.ucsd.edu/LISA/lisa-traffic-sign-dataset.html)</li>
+        <ul>
+            <li>Pros: North America Standard and cConsover all traffic sign types.</li>
+            <li>Cons: The format of annotations does not match our need, lack of essential information and does not have extreme cases.</li>
+        </ul>
+
+        <li>CURE-TSR (https://ghassanalregib.com/cure-tsr/)</li>
+        <ul>
+            <li>Pros: Includes corner cases.</li>
+            <li>Cons: Format of annotations.</li>
+        </ul>
+        <li>Belgium-TS (https://btsd.ethz.ch/shareddata/)</li>
+
+        <li>GTSB (http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset)</li>
+    </ol>
+    <p> We finally chose the LISA-TS as our trianing data set. Following is the peek of LISA-TS:</p>
+    <img class="center" src="LISA_PEEK.png" alt="LISA_PEEK" id="#LISA_PEEK" width="600" height="300">
+
+    <p>CV pre-processing:</p>
+    Our algorithm is as following:
+    <img class="center" src="CV.png" alt="CV" id="#CV" width="800" height="410">
+    
+    <h4>YOLO-Tiny + LISA-TS</h4>
+    <p>Based on our solutions analyzed above, we choose YOLO-Tiny + LISA-TS as the final model.</p>
+    <p>Data-Preparation : We applied a set of tools to help us prepare the data.</p>
+    <p>YOLO-Tiny : Instead of 102 layers of YOLOv3, YOLO-Tiny only has 9 layers, which means faster to trian.</p>
+    <p>Model Configurations : </p>
+    <ul>
+        <li>Batches = 64</li>
+        <li>Subdivision = 8</li>
+        <li>maxbathes = 60000</li>
+        <li>steps = 48000, 54000</li>
+        <li>Momentum = 0.9</li>
+        <li>learning_rate=0.001</li>
+        <li>burn_in=1000</li>
+        
+    </ul>
+
+    <p>Training : </p>
+    <ul>
+        <li>OS: Ubuntu 18.04 LTS</li>
+        <li>CUDA: 10.01</li>
+        <li>GPU: GTX 2080 Ti</li>
+        <li>OPENCV: 3.4.4</li>  
+    </ul>
+
+    <p>Results:</p>
+    <img class="center" src="SHOW_1.png" alt="SHOW_1" id="#SHOW_1" width="600" height="310">
+    <br>
+    <img class="center" src="SHOW_2.png" alt="SHOW_2" id="#SHOW_2" width="600" height="310">
+
 
 
     <h2>Approach 2 - SVM + HOG</h2>
