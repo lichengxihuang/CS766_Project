@@ -26,41 +26,42 @@
     <br>
 
     <h2>Motivation</h2>
-    <p>In the development of autonomous vehicles, recognizing the stop signs plays a very important role. Although in the future, when connected autonomous vehicles are developed, this may be solved by using roadside units sending instructions to the vehicles, nowadays, we still need to rely on the vehicles themselves to recognize road lanes and signs. Furthermore, vehicles that can recognize traffic signs will improve the driving experiences and safety for the drivers. Most drivers may have experienced situations when they were driving too fast on the highways and did not see clearly what the road guidance sign tells, hence driving to the wrong direction. In other cases, drivers may not see speed limit signs when the environment is dark, hence getting a ticket on over speeding.</p>
+    
+    <p>With the development of autonomous vehicles, recognizing stop signs plays a very important role. Although in the future, when connected autonomous vehicles are developed, this may be solved by using roadside units sending instructions to the vehicles, nowadays, we still need to rely on the vehicles themselves to recognize these signs. Furthermore, vehicles that can recognize traffic signs will improve the driving experiences and safety for the drivers. Most drivers may have experienced situations when they were driving too fast on the highways and did not see clearly what the road guidance sign tells, hence driving to the wrong direction. In other cases, drivers may not see speed limit signs when the environment is dark, hence getting a ticket on over speeding.</p>
+    
     <p>These scenarios can all be avoided as long as we can develop an application that can automatically recognize the traffic signs. The vehicles that are equipped with this application can extract the key information, and either speak it out or display it on the head-up displays (HUD).
     </p>
+
+    <p>For our project, we focus on stop sign detection.</p>
+
     <br>
     
     <h2>Current state-of-the-art</h2>
-    <p> In general speaking of stop signs detection technology, it’s already well developed per se. It is a significant part of Advanced driver-assistance systems(ADAS). Such technologies are already used broadly by vehicle manufacturers on their products, such as BMW, Ford, Volvo etc., to improve the performance and safety.
- 
-    Most cars with an ADAS are able to detect stop signs.</p>
-     
-    <p>The cornerstones of the TSR are based on two facts:
-    The features of traffic signs in the same area are identical. There is a standard of the design and size of all traffic sign published by MUTCD in the U.S.
-    The cutting-edge algorithms enable cars to analysis and understand the content of stop signs. </p>
-     
-    <p>The concept was brought up in 1968, but the recent blossom is triggered by the breaking through in hardware and Machine learning algorithms. </p>
-     
-    Following are some technical details of the technology:
-    Blurring
-    Color-based detection: e.g. stop signs are red etc.
-    Shape-based detection: e.g. stop signs are hexagon in most places
-    Cropped and extract features
-    Separation.
-     
-    <p>Under each topic, there are numbers of solutions. 
-    The approaches that researchers commonly use include:
-    Histogram of oriented gradients (HOG)
-    Machine learning approaches:
-    RCNN(Mask-RCNN, Fast-RCNN …...)
-    CNN
-    Classification
-    Others.
-    </p>
+    <p> In general speaking of stop signs detection technology, it’s already well developed. It is a significant part of Advanced driver-assistance systems(ADAS). Such technologies are already used broadly by vehicle manufacturers on their products, such as BMW, Ford and Volvo, to improve the performance and safety. Most cars with an ADAS are able to detect stop signs.</p>
+
+    <p>The cornerstones of the stop signs detection are based on two facts:</p>
+
+    <ol>
+        <li>The features of stop signs are identical in the U.S. There is a standard of the design and size of all traffic sign published by MUTCD in the U.S.</li>
+        <li>The cutting-edge algorithms enable cars to analyze and understand the content of stop signs.</li>
+    </ol>
+
+    <p>The concept was brought up in 1968, but the recent blossom was triggered by the breaking through in hardware and machine learning algorithms.</p>
+    
+    <p>Following are some widely-used approaches to the problem:</p>
+    <ul>
+        <li>Histogram of oriented gradients (HOG) + supervised learning (SVM, random forest)</li>
+        <li>Deep learning approaches (RCNN, Mask-RCNN, Fast-RCNN, Yolo, ...)</li>
+    </ul>
+    
     <br>
 
-    <h2>Model 1 - Deep Learning Approch</h2>
+    <h2>Structure of the webpage</h2>
+    <p>In the following of the webpage, we will talk about the two approaches we implemented: the deep learning approach and the traditional computer vision approach associated with the RBF kernel SVM classifier.</p>
+
+    <br>
+
+    <h2>Approach 1 - deep learning</h2>
     <h3>Overview</h3>
     <p>In this part, we tried to use YOLOv3 to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
 
@@ -68,14 +69,13 @@
     
 
 
-
-
     <br>
 
 
-    <h2>Model 2 - SVM + HOG</h2>
+    <h2>Approach 2 - SVM + HOG</h2>
     <h3>Algorithm</h3>
-    <p>We downladed dataset with stop signs as positive dataset and without stop signs as negative dataset from the internet. Applied algorithm to select and crop regions of interest (ROI) for positive dataset. Randomly select and crop subimages from negative data set. Resize the subimages to be the same size and use HOG to extract features for each images.</p>
+    <p>Our second approach is called SVM + HOG approach. It includes image processing, ROI (region of interest) selection, HOG feature extraction and supervised learning.</p>
+    <p>Our detailed algorithm is shown below.</p>
 
     <img class="center" src="algo_process.png" alt="algorithm" id="#algorithm" width="900" height="410">
     <br>
@@ -155,8 +155,8 @@
     <img class="center" src="neg_dataset.png" alt="neg_dataset" width="70%" height="70%">
     <br>
 
-    <h3>Training (Hog + SVM)</h3>
-    <p>We extracted hog features for each image from our positive and negative training dataset. Using the feature of each item as well as their labels, we feed into our weigthed RBF kernel SVM classifier for training.</p>
+    <h3>Training (HOG + SVM)</h3>
+    <p>We extracted HOG features for each image from our positive and negative training dataset. Using the feature of each item as well as their labels, we feed into our weigthed RBF kernel SVM classifier for training.</p>
 
 
     <h3>Testing</h3>
