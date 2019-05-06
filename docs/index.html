@@ -22,7 +22,7 @@
 
     <p> Traffic signs play a significant role in the modern traffic system, and it becomes even more important in recent years due to the emergence of autonomous vehicles. The problem we are aiming to solve is to use the computer vision technologies to do the stop sign detection under different driving scenarios and extreme cases.
     </p>
-    
+
     <br>
 
     <h2>Motivation</h2>
@@ -36,7 +36,7 @@
     <br>
 
     <h2>Model 1 - Deep Learning Approch</h2>
-    <h3>OverView</h3>
+    <h3>Overview</h3>
     <p>In this part, we tried to use YOLOv3 to perform traffic sign detection with COCO dataset and LISA Traffic Sign Dataset (LISA-TS), we examed our results by using challenging condition pictures.</p>
 
     <h3>First try: YOLOv3 + COCO</h3>
@@ -45,63 +45,117 @@
 
 
 
-
-
-
-    <h2> Model 2 - SVM + HOG</h2>
-    <h3> Algorithm</h3>
-    <p> We downladed dataset with stop signs as positive dataset and without stop signs as negative dataset from the internet. Applied algorithm to select  and crop ROI for positive dataset. Randomly select and crop subimages from negative data set. Resize the subimages to be the same size and use HOG to extract features for each images.</p>
-
-    <img src="algo_process.jpg" alt="algorithm" width="900" height="350">
-    <br>
-
-    <h3> Training Dataset</h3>
-    <h4> Positive Training Dataset</h4>
-    <p> Our positive training dataset including the extreme conditions such as raining, snowing, blur, dark. Part of the traing dataset is shown as following.</p>
-    <img src="positive.jpg" alt="positive" width="550" height="350">
-    <br>
-
-    <h4> Negative Training Dataset</h4>
-    <p> Our negative training dataset including the subimages without stop signs. Part of the traing dataset is shown as following.</p>
-     <img src="negative.jpg" alt="negative" width="400" height="300">
-    <br>
-
-    <h3>Example</h3>
-    <p>Here we want to illustrate the process of our algorithm using an image with complex background. First, we convert the orignial image to a HSV format. HSV format is more robust to color segmentation. We define a range to select out all the red objects.</p>
-    <img src="ex1.jpg" alt="ex1" width="800" height="200">
-    <br>
-    <p>Secondly, we use dialation and erosiion to romove noise in the image.</p>
-    <img src="ex2.jpg" alt="ex2" width="800" height="200">
-    <br>
-    <p>Thirdly, we applied algorithm to fill holes within a contour. For example, after filling the holes, the "stop" holes in the stop sign will be removes. In this way, we can remove unneccessary contours and decrease the number of ROI candidates to reduce the running time and increase the detection accuracy.</p>
-    <img src="ex3.jpg" alt="ex3" width="800" height="200">
-    <br>
-    <p>Fourthly, we discard the contours with sizes smaller than a threshold to remove small unneccessary objects.</p>
-    <img src="ex4.jpg" alt="ex4" width="800" height="200">
-    <br>
-    <p>We pick the bottom left and top left pixels to draw bounding boxes. Each subimage in the bounding box is a candidate ROI.</p>
-    <img src="ex5.jpg" alt="ex5" width="800" height="200">
-    <br>
-    <p>Finally, remove the unneccessary small bounding box laying within a big bounding box to get the ROI candidates.</p>
-    <img src="ex6.jpg" alt="ex6" width="800" height="200">
-    <br>
-
-    <h4>Selection using SVM</h4>
-    <p>We got several ROI candidates after the ROI selection. We use HOG to extract features for each ROI candidates and put the features for each ROI candidate to the trained RBF kernel SVM model and get the stop sign.</p>
-    <img src="test.jpg" alt="test" width="800" height="350">
     <br>
 
 
-    <h2>Results and Comparation</h2>
-    <p> We tested our algorithm on extreme weather conditions as well as with the images of complex backgrouds (such as with lots of red objects around the stop signs as the following. Our algorithm is very robust to these conditions and can detect the stop signs in these images correctly.</p>
-    
+    <h2>Model 2 - SVM + HOG</h2>
+    <h3>Algorithm</h3>
+    <p>We downladed dataset with stop signs as positive dataset and without stop signs as negative dataset from the internet. Applied algorithm to select and crop regions of interest (ROI) for positive dataset. Randomly select and crop subimages from negative data set. Resize the subimages to be the same size and use HOG to extract features for each images.</p>
+
+    <img class="center" src="algo_process.png" alt="algorithm" id="#algorithm" width="900" height="410">
+    <br>
+
+    <h3>Datasets</h3>
+    <h4>Original datasets</h3>
+    <p>We randomly downloaded around 135 pictures that contain one or more stop signs from the Internet, to form our original positive dataset. Some of them are shown below.</p>
+
     <div align="center">
-        <img src="result1.jpg" alt="result1" width="600" height="300">
-        <img src="result2.jpg" alt="result2" width="600" height="300">
+        <img src="orig_pos1.jpg" alt="orig_pos1" height="200">
+        <img src="orig_pos2.jpg" alt="orig_pos2" height="200">
+        <img src="orig_pos3.jpg" alt="orig_pos3" height="200">
+        <img src="orig_pos4.jpg" alt="orig_pos4" height="200">
+        <img src="orig_pos5.jpg" alt="orig_pos5" height="200">
+        <img src="orig_pos6.jpg" alt="orig_pos6" height="200">
     </div>
 
+    <p>For negative dataset, we download 417 pictures from <a href="#OPTIMOL">[1]</a>. All the pictures do not contain any stop signs. Here are some of them.</p>
+
+    <div align="center">
+        <img src="orig_neg1.jpg" alt="orig_neg1" height="200">
+        <img src="orig_neg2.jpg" alt="orig_neg2" height="200">
+        <img src="orig_neg3.jpg" alt="orig_neg3" height="200">
+    </div>
+
+    <h4>Positive training dataset</h4>
+    
+    <p>The generation of positive training dataset requires a set of image processing steps. Here we use an example <a href="#r1">[2]</a> to illustrate the process how we crop the ROI to generate our positive training dataset.</p>
+        
+
+    <p>Step 1, convert the orignial image to HSV color ranges. HSV stands for hue, saturation and value, and is more robust to color segmentation. We define a color range to select out all the red objects, as shown below.</p>
+    <img class="center" src="ex1.png" alt="ex1" width="800" height="200">
+    
     <br>
-    <p>We drove in Madison when the weather is raining and sunny. Our alogrithm can successfully detect and track stop signs in the following video.
+    
+    <p>Step 2, we use a set of morphological transformations, including dialation and erosiion, to romove the noise in the image.</p>
+    <img class="center" src="ex2.png" alt="ex2" width="800" height="200">
+
+    <br>
+    
+    <p>Step 3, we fill in holes within each connected component. As you will see, after filling the holes, the text "stop" in the stop sign is removed. In this way, we can remove unneccessary contours and decrease the number of ROI candidates to reduce the running time and hence increase the detection accuracy.</p>
+    <img class="center" src="ex3.png" alt="ex3" width="800" height="200">
+    
+    <br>
+    
+    <p>Step 4, we set a threshold, and discard all the contours with size smaller than that threshold. With this, we can remove small (unneccessary) objects.</p>
+    <img class="center" src="ex4.png" alt="ex4" width="800" height="200">
+    
+    <br>
+    
+    <p>Step 5, for each contour, or connected component, we find its top left and bottom right coordinates. By multiplying these coordinates with some slack factor (here we used 1.1), we can draw the bounding boxes. Each subimage in the bounding boxes is a ROI candidate.</p>
+    <img class="center" src="ex5.png" alt="ex5" width="800" height="200">
+    
+    <br>
+    
+    <p>Step 6, removing all the small bounding boxes that are involved in some larger bounding boxes gives us all the ROI candidates.</p>
+    <img class="center" src="ex6.png" alt="ex6" width="800" height="200">
+
+    <br>
+
+    <p>Step 7, select out all the subimages within each bounding box and scale them to the same size.</p>
+    <img class="center" src="ex7.png" alt="ex7" width="50%" height="50%">
+
+    <br>
+
+    <p>Step 8, remove all the false positives, and keep only the correct ones in our positive training dataset.</p>
+    <img class="center" src="ex8.jpg" alt="ex8" width="100" height="100">
+
+    <br>
+
+    <p>The image below shows part of our positive training dataset, which represents normal conditions as well as some extreme conditions including raining, snowing, blurring and darkness.</p>
+    <img class="center" src="pos_dataset.png" alt="pos_dataset" width="70%" height="70%">
+    <br>
+
+    <h4>Negative training dataset</h4>
+    <p>We resized our original negative images (images do not contain stop signs) to some fixed size to form the negative training dataset. Part of the dataset is shown below.</p>
+    <img class="center" src="neg_dataset.png" alt="neg_dataset" width="70%" height="70%">
+    <br>
+
+    <h3>Training (Hog + SVM)</h3>
+    <p>We extracted hog features for each image from our positive and negative training dataset. Using the feature of each item as well as their labels, we feed into our weigthed RBF kernel SVM classifier for training.</p>
+
+
+    <h3>Testing</h3>
+    <p>Whenever we get a test image, let's takes the example image we used above for generating the positive training dataset, we can extract ROI candidates following the same steps as we generate positive training dataset. Hence, for the example image, we have the following steps for testing.</p>
+    
+    <img class="center" src="testing.png" alt="testing" width="800">
+    
+    <p>That is, given the extracted ROIs, we extract HOG features for each of them. Feed the HOG featues into our trained RBF kernel SVM classifier and test whether it is positive or negative. If positive, we select that ROI and draw a green bouding box around it. Our final result is shown below.</p>
+    
+    <img class="center" src="testing1.jpg" alt="testing1" width="600">
+
+    <br>
+
+    <h2>Results and Comparation</h2>
+    <p> We tested our model on images taken under extreme weather conditions as well as those with complex backgrounds (images with a lot of confusing red objects that are very similar to stop signs). Our algorithm is very robust to these conditions and can detect the stop signs in these images accurately.</p>
+    
+    
+    <img class="center" src="results1.png" alt="results1" width="600">
+    <br>
+    <img class="center" src="results2.png" alt="results2" width="600">
+
+    <br>
+
+    <p>Furthermore, we drove in the city of Madison, WI in both rainy and sunny days and took the videos. Our model again showed robust ability of detecting and tracking the stop signs under different scenarios. Videos are shown below.
     <div align="center">
         <iframe src="https://www.youtube.com/embed/L8ZecvQdd00?autoplay=0"></iframe>
         <iframe src="https://www.youtube.com/embed/EmXHeHNq6tU?autoplay=0"></iframe>
@@ -110,6 +164,16 @@
     <h2>Discussion</h2>
     <p> Our algorithm can recognize the stop sign in differnet scienarios quickly and robustly. </p>
     <br>
+
+
+
+    <h2>References</h2>
+    <ol>
+        <li id="OPTIMOL">http://vision.stanford.edu/projects/OPTIMOL/category/stop-sign/catmain.html</li>
+        <li id="r1">https://www.brooklynpaper.com/assets/photos/40/14/dtg-dumbo-stop-sign-safest-ever-2017-04-07-bk01_z.jpg</li>
+    </ol>
+    
+    
 
 </div>
 
