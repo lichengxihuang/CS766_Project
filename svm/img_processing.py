@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import os
 
-
-
 def main(cropped=False):
     # # in_dir = 'positive'
     # # out_dir = 'training/pos'
@@ -37,7 +35,6 @@ def main(cropped=False):
 
 
 
-    # filename = '1280px-Vienna_Convention_road_sign_B2a.png'
     filename = 'img.jpg'
 
     filename_list = filename.split('.')
@@ -57,13 +54,9 @@ def main(cropped=False):
 
 
 def get_rois(img, ret_points=False):
-    """
-    :param img:
-    :param ret_points:
-    :return:
-    """
+    # scale to approximately size of 1280*720
     scale = 2 / (img.shape[0] / 720 + img.shape[1] / 1280)
-    # scale = 2 / (img.shape[0] / 360 + img.shape[1] / 640)
+
     img = cv2.resize(img, None, fx=scale, fy=scale)
 
     # get_edges(img)
@@ -88,8 +81,8 @@ def get_rois(img, ret_points=False):
     # hull = cv2.convexHull(cnt)
     # cv2.drawContours(img, [hull], 0, (0, 255, 0), 3)
 
-    c = 1.1
-    points = []
+    c = 1.1  # scale factor
+    points = []  # store the points of bounding rectangles
     for cnt in contours:
         is_child = False
         x, y, w, h = cv2.boundingRect(cnt)
@@ -103,6 +96,7 @@ def get_rois(img, ret_points=False):
 
         curr = [x_1, y_1, x_2, y_2]
 
+        # remove small bounding rectangles that are covered by some larger ones
         i = 0
         while i < len(points):
             point = points[i]
@@ -136,6 +130,7 @@ def get_rois(img, ret_points=False):
         return rois
 
 
+# not used
 def get_edges(img):
 
     ref_contour = np.array([[[295, 61]], [[61, 295]], [[61, 626]], [[295, 860]], [[626, 860]], [[860, 626]], [[860, 295]], [[626, 61]]])
@@ -181,7 +176,7 @@ def get_edges(img):
     cv2.waitKey()
 
 
-
+# find connected components and remove small ones
 def find_connected(mask, thresh=0):
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(mask, connectivity=4)
 
@@ -208,10 +203,6 @@ def get_mask(img):
 
     mask1 = cv2.inRange(hsv, np.array([0, 50, 40]), np.array([10, 255, 255]))
     mask2 = cv2.inRange(hsv, np.array([150, 50, 40]), np.array([180, 255, 255]))
-
-    # # not good
-    # mask1 = cv2.inRange(hsv, np.array([0, 30, 40]), np.array([10, 255, 255]))
-    # mask2 = cv2.inRange(hsv, np.array([130, 30, 40]), np.array([180, 255, 255]))
 
 
     mask = mask1 | mask2
